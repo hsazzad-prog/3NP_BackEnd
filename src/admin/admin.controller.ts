@@ -1,5 +1,6 @@
-import { Body, Controller, Get, Param, Post } from "@nestjs/common";
+import { Body, Controller, Get, Param, Post, Query, Request, UsePipes, ValidationPipe } from "@nestjs/common";
 import { AdminService } from "./admin.service";
+import { AdminDTO } from "./admin.dto";
 
 @Controller('admin')
 export class AdminController{
@@ -13,9 +14,19 @@ export class AdminController{
 getAdminById(@Param() id:number): any {
 return this.adminService.getAdminById(id);
 }
+@Get('/search')
+getAdminbyName(@Query() qry:AdminDTO): string {
+
+return this.adminService.getAdminByName(qry);
+}
+
 @Post('/addadmin')
-addAdmin(@Body() data:object):object {
+@UsePipes(new ValidationPipe())
+addAdmin(@Body() data:AdminDTO):string {
+    console.log(data);
 return this.adminService.addAdmin(data);
 }
 
 }
+
+

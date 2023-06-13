@@ -1,4 +1,5 @@
 import { Injectable } from "@nestjs/common";
+import { AdminDTO } from "./admin.dto";
 
 
 @Injectable()
@@ -10,9 +11,13 @@ export class AdminService{
     getAdminById(id: number): object{
     return ({id: 2, name: "abc", age:30});
     }
-    addAdmin(data: object)
+    getAdminByName(mydata: AdminDTO): string{
+    return mydata.name;
+    }
+
+    addAdmin(data: AdminDTO): string
     {
-        return data;
+        return data.email;
     }
 
 
