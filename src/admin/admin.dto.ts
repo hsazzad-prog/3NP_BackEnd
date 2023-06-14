@@ -9,3 +9,10 @@ export class AdminDTO{
     email: string;
     password: string;
 }
+
+export class AdminUpdateDTO{
+    id:number;
+    name: string;
+     email: string;
+     password: string;
+ }

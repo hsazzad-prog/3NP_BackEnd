@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { AdminDTO } from "./admin.dto";
+import { AdminDTO, AdminUpdateDTO } from "./admin.dto";
 
 
 @Injectable()
@@ -19,6 +19,21 @@ export class AdminService{
     {
         return data.email;
     }
+
+    updateAdmin(data: AdminUpdateDTO): object
+    {
+console.log(data.id);
+console.log(data.name);
+        return data;
+    }
+
+    updateAdminById(id:number,data: AdminDTO): object
+    {
+console.log(id);
+console.log(data);
+        return data;
+    }
+
 
 
 
