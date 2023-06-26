@@ -1,9 +1,10 @@
 import { Injectable } from "@nestjs/common";
-import { AdminDTO, AdminUpdateDTO } from "./admin.dto";
+import { AdminDTO, AdminLoginDTO, AdminUpdateDTO } from "./admin.dto";
 import { InjectRepository } from "@nestjs/typeorm";
 import { AdminEntity } from "./admin.entity";
 import { Repository } from "typeorm";
-import { ManagerEntity } from "src/manager/manager.entity";
+import { ManagerEntity } from "../manager/manager.entity";
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AdminService {
@@ -58,7 +59,32 @@ export class AdminService {
         });
     }
 
+    async signup(data: AdminDTO): Promise<AdminEntity> {
+        const salt = await bcrypt.genSalt();
+        data.password = await bcrypt.hash(data.password,salt);
+       return this.adminRepo.save(data);
+    }
+async signIn(data: AdminLoginDTO) {
+    const userdata= await this.adminRepo.findOneBy({email:data.email});
+const match:boolean = await bcrypt.compare(data.password, userdata.password);
+return match;
 
+}
+
+   async getimagebyadminid(adminid:number) {
+const mydata:AdminDTO =await this.adminRepo.findOneBy({ id:adminid});
+console.log(mydata);
+return  mydata.filenames;
+    }
+getManager(id):Promise<AdminEntity[]>
+{
+    return this.adminRepo.find({
+        where:{id:id},
+        relations: {
+            managers: true,
+        },
+    });
+} 
 
 
 }

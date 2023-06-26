@@ -9,6 +9,13 @@ export class AdminDTO {
     email: string;
     password: string;
     phone: number;
+    filenames: string;
+
+}
+export class AdminLoginDTO {
+     @IsEmail({}, { message: "invalid email" })
+    email: string;
+    password: string;
 }
 
 export class AdminUpdateDTO {

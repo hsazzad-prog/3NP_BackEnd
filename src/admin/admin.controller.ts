@@ -74,6 +74,52 @@ export class AdminController {
         console.log(manager);
         return this.adminService.addManager(manager);
     }
+    @Get('/getmanager/:adminid')
+    getManagers(@Param('adminid', ParseIntPipe) adminid:number) {
+       
+        return this.adminService.getManager(adminid);
+    }
+
+@Post('/signup')
+@UseInterceptors(FileInterceptor('image',
+        {
+            fileFilter: (req, file, cb) => {
+                if (file.originalname.match(/^.*\.(jpg|webp|png|jpeg)$/))
+                    cb(null, true);
+                else {
+                    cb(new MulterError('LIMIT_UNEXPECTED_FILE', 'image'), false);
+                }
+            },
+            limits: { fileSize: 30000 },
+            storage: diskStorage({
+                destination: './uploads',
+                filename: function (req, file, cb) {
+                    cb(null, Date.now() + file.originalname)
+                },
+            })
+        }
+    ))
+    @UsePipes(new ValidationPipe)
+signup(@Body() mydata:AdminDTO,@UploadedFile() imageobj: Express.Multer.File){
+console.log(mydata);
+console.log(imageobj.filename);
+mydata.filenames = imageobj.filename;
+return this.adminService.signup(mydata);
+
+}
+
+@Post('/signin')
+signIn(@Body() data:AdminDTO){
+    return this.adminService.signIn(data);
+}
+
+@Get('getimagebyadminid/:adminId')
+async getimagebyid(@Param('adminId', ParseIntPipe) adminId:number, @Res() res){
+    const filename = await this.adminService.getimagebyadminid(adminId);
+    res.sendFile(filename, { root: './uploads' })
+
+}
+
 
 
 

@@ -3,7 +3,7 @@ import { AdminController } from "./admin.controller";
 import { AdminService } from "./admin.service";
 import { AdminAdress, AdminEntity, AdminProfile } from "./admin.entity";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { ManagerEntity } from "src/manager/manager.entity";
+import { ManagerEntity } from "../manager/manager.entity";
 
 @Module({
     imports: [ TypeOrmModule.forFeature([AdminEntity, AdminProfile, AdminAdress,ManagerEntity]),],

@@ -12,6 +12,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
      database: '3NP_Project',//Change to your database name
      autoLoadEntities: true,
      synchronize: true,
+     
      } ),
     ],
   controllers: [],

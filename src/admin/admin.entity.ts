@@ -1,5 +1,5 @@
 
-import { ManagerEntity } from 'src/manager/manager.entity';
+import { ManagerEntity } from '../manager/manager.entity';
 import { Column, Entity, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity("Admin")
@@ -12,6 +12,10 @@ name:string;
 email:string;
 @Column()
 phone:number;
+@Column()
+password:string;
+@Column()
+filenames:string;
 
 @OneToMany(() => ManagerEntity, manager => manager.admin)
  managers: ManagerEntity[];
