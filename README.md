@@ -64,8 +64,7 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 
 ## Stay in touch
 
-- Author - [Sazzad Hossain](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
+- Author - [Sazzad Hossain]
 - Profile - (https://cs.aiub.edu/profile/sazzad)
 - Linkedin - (https://www.linkedin.com/in/hsazzad/)
 

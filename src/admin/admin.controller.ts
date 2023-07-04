@@ -1,8 +1,10 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, Query, Request, Res, UploadedFile, UseInterceptors, UsePipes, ValidationPipe } from "@nestjs/common";
+import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, Query, Request, Res, UploadedFile, UseInterceptors, UsePipes, ValidationPipe, Session, UseGuards } from "@nestjs/common";
 import { AdminService } from "./admin.service";
 import { AdminDTO, AdminUpdateDTO } from "./admin.dto";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { MulterError, diskStorage } from "multer";
+import session = require("express-session");
+import { SessionGuard } from "./session.gaurd";
 
 
 @Controller('admin')
@@ -30,9 +32,11 @@ export class AdminController {
     }
 
     @Put('/updateadmin')
+    @UseGuards(SessionGuard)
     //@UsePipes(new ValidationPipe())
-    updateAdmin(@Body() data: AdminUpdateDTO): object {
-        return this.adminService.updateAdmin(data);
+    updateAdmin(@Body() data: AdminUpdateDTO,@Session() session): object {
+console.log(session.email);
+        return this.adminService.updateAdmin(session.email,data);
     }
     @Put('/updateadmin/:id')
     @UsePipes(new ValidationPipe())
@@ -109,8 +113,18 @@ return this.adminService.signup(mydata);
 }
 
 @Post('/signin')
-signIn(@Body() data:AdminDTO){
-    return this.adminService.signIn(data);
+signIn(@Body() data:AdminDTO, @Session() session){
+   
+    if (this.adminService.signIn(data))
+    {
+        session.email=data.email;
+return true;
+    }
+    else{
+
+        return false;
+    }
+   // return this.adminService.signIn(data);
 }
 
 @Get('getimagebyadminid/:adminId')

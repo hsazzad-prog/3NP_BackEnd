@@ -29,8 +29,8 @@ export class AdminService {
         return this.adminRepo.save(data);
     }
 
-    async updateAdmin(data: AdminUpdateDTO): Promise<AdminEntity> {
-        await this.adminRepo.update(data.id, data);
+    async updateAdmin(email:string,data: AdminUpdateDTO): Promise<AdminEntity> {
+        await this.adminRepo.update({email:email}, data);
         return this.adminRepo.findOneBy({ id: data.id });
     }
     async updateAdminById(id: number, data: AdminDTO): Promise<AdminEntity> {
