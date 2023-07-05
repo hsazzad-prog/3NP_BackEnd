@@ -1,10 +1,11 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, Query, Request, Res, UploadedFile, UseInterceptors, UsePipes, ValidationPipe, Session, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, Query, Request, Res, UploadedFile, UseInterceptors, UsePipes, ValidationPipe, Session, UseGuards, NotFoundException, HttpStatus } from "@nestjs/common";
 import { AdminService } from "./admin.service";
 import { AdminDTO, AdminUpdateDTO } from "./admin.dto";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { MulterError, diskStorage } from "multer";
 import session = require("express-session");
 import { SessionGuard } from "./session.gaurd";
+import { AdminEntity } from "./admin.entity";
 
 
 @Controller('admin')
@@ -15,10 +16,23 @@ export class AdminController {
     getIndex(): any {
         return this.adminService.getIndex();
     }
+
     @Get('/search/:id')
-    getAdminById(@Param('id', ParseIntPipe) id: number): object {
-        return this.adminService.getAdminById(id);
+    async getAdminById(@Param('id', ParseIntPipe) id: number): Promise<AdminEntity> {
+
+        const res = await this.adminService.getAdminById(id)
+        if (res !== null) {
+            console.log(res);
+            return res;
+        }
+        else {
+            throw new NotFoundException({
+                status: HttpStatus.NOT_FOUND,
+                message: "Admin not found"
+            });
+        }
     }
+
     @Get('/search')
     getAdminbyIDAndName(@Query() qry: any): object {
 
@@ -34,9 +48,9 @@ export class AdminController {
     @Put('/updateadmin')
     @UseGuards(SessionGuard)
     //@UsePipes(new ValidationPipe())
-    updateAdmin(@Body() data: AdminUpdateDTO,@Session() session): object {
-console.log(session.email);
-        return this.adminService.updateAdmin(session.email,data);
+    updateAdmin(@Body() data: AdminUpdateDTO, @Session() session): object {
+        console.log(session.email);
+        return this.adminService.updateAdmin(session.email, data);
     }
     @Put('/updateadmin/:id')
     @UsePipes(new ValidationPipe())
@@ -79,13 +93,13 @@ console.log(session.email);
         return this.adminService.addManager(manager);
     }
     @Get('/getmanager/:adminid')
-    getManagers(@Param('adminid', ParseIntPipe) adminid:number) {
-       
+    getManagers(@Param('adminid', ParseIntPipe) adminid: number) {
+
         return this.adminService.getManager(adminid);
     }
 
-@Post('/signup')
-@UseInterceptors(FileInterceptor('image',
+    @Post('/signup')
+    @UseInterceptors(FileInterceptor('image',
         {
             fileFilter: (req, file, cb) => {
                 if (file.originalname.match(/^.*\.(jpg|webp|png|jpeg)$/))
@@ -104,35 +118,34 @@ console.log(session.email);
         }
     ))
     @UsePipes(new ValidationPipe)
-signup(@Body() mydata:AdminDTO,@UploadedFile() imageobj: Express.Multer.File){
-console.log(mydata);
-console.log(imageobj.filename);
-mydata.filenames = imageobj.filename;
-return this.adminService.signup(mydata);
+    signup(@Body() mydata: AdminDTO, @UploadedFile() imageobj: Express.Multer.File) {
+        console.log(mydata);
+        console.log(imageobj.filename);
+        mydata.filenames = imageobj.filename;
+        return this.adminService.signup(mydata);
 
-}
-
-@Post('/signin')
-signIn(@Body() data:AdminDTO, @Session() session){
-   
-    if (this.adminService.signIn(data))
-    {
-        session.email=data.email;
-return true;
     }
-    else{
 
-        return false;
+    @Post('/signin')
+    signIn(@Body() data: AdminDTO, @Session() session) {
+
+        if (this.adminService.signIn(data)) {
+            session.email = data.email;
+            return true;
+        }
+        else {
+
+            return false;
+        }
+        // return this.adminService.signIn(data);
     }
-   // return this.adminService.signIn(data);
-}
 
-@Get('getimagebyadminid/:adminId')
-async getimagebyid(@Param('adminId', ParseIntPipe) adminId:number, @Res() res){
-    const filename = await this.adminService.getimagebyadminid(adminId);
-    res.sendFile(filename, { root: './uploads' })
+    @Get('getimagebyadminid/:adminId')
+    async getimagebyid(@Param('adminId', ParseIntPipe) adminId: number, @Res() res) {
+        const filename = await this.adminService.getimagebyadminid(adminId);
+        res.sendFile(filename, { root: './uploads' })
 
-}
+    }
 
 
 

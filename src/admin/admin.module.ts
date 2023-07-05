@@ -5,8 +5,11 @@ import { AdminAdress, AdminEntity, AdminProfile } from "./admin.entity";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { ManagerEntity } from "../manager/manager.entity";
 
+
 @Module({
-    imports: [ TypeOrmModule.forFeature([AdminEntity, AdminProfile, AdminAdress,ManagerEntity]),],
+    imports: [ TypeOrmModule.forFeature([AdminEntity, AdminProfile, AdminAdress,ManagerEntity]),
+      
+  ],
     controllers: [AdminController],
     providers: [AdminService],
   })

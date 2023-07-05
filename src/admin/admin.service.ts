@@ -18,7 +18,9 @@ export class AdminService {
         return this.adminRepo.find();
     }
     async getAdminById(id: number): Promise<AdminEntity> {
-        return this.adminRepo.findOneBy({ id });
+      
+            return this.adminRepo.findOneBy({ id });
+      
     }
 
     async getAdminbyIDAndName(id, name): Promise<AdminEntity> {
