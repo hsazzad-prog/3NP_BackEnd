@@ -13,10 +13,12 @@ export class AdminDTO {
 
 }
 export class AdminLoginDTO {
-     @IsEmail({}, { message: "invalid email" })
+    @IsNotEmpty()
     email: string;
+    @IsNotEmpty()
     password: string;
 }
+
 
 export class AdminUpdateDTO {
     id: number;

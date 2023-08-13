@@ -9,10 +9,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
      port: 5432,
      username: 'postgres',
      password: 'root',
-     database: '3NP_Project',//Change to your database name
-     autoLoadEntities: true,
+    database: 'abc',//Change to your database name
+    autoLoadEntities: true,
      synchronize: true,
-     
      } ),
     ],
   controllers: [],
